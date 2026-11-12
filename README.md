@@ -56,7 +56,7 @@ AI_BASE_URL = "https://api.openai.com/v1"
 AI_MODEL = "gpt-4o-mini"
 ```
 
-The model name must be available to your API account. API billing and usage limits are separate from a ChatGPT subscription. A `429` response means the provider refused the request due to a rate or usage limit; deploying the app does not resolve that provider-side issue.
+The model name must be available to your API account. API billing and usage limits are separate from a ChatGPT subscription. A `429` response means the provider refused the request due to a rate or usage limit; deploying the app does not resolve that provider-side issue. The app allows up to 120 seconds per request and retries transient API failures up to five times; persistent provider outages still need to be resolved by the provider.
 
 ### 4. Check the deployed app
 

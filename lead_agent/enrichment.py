@@ -4,7 +4,7 @@ import json
 import os
 from typing import Any
 
-import requests
+from openai import APIError, OpenAI
 import streamlit as st
 from dotenv import load_dotenv
 
@@ -35,7 +35,7 @@ def enrich_lead(lead: dict[str, Any]) -> dict[str, Any]:
         )
 
     base_url = _get_setting(
-        "AI_BASE_URL", "https://api.openai.com/v1"
+        "AI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/"
     ).rstrip("/")
     model = _get_setting("AI_MODEL").strip()
     if not model:
@@ -67,27 +67,26 @@ def enrich_lead(lead: dict[str, Any]) -> dict[str, Any]:
     )
 
     try:
-        response = requests.post(
-            f"{base_url}/chat/completions",
-            headers={"Authorization": f"Bearer {api_key}"},
-            json={
-                "model": model,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "You provide cautious, evidence-bound business lead analysis.",
-                    },
-                    {"role": "user", "content": prompt},
-                ],
-                "response_format": {"type": "json_object"},
-            },
-            timeout=45,
+        client = OpenAI(
+            api_key=api_key,
+            base_url=base_url,
+            timeout=120.0,
+            max_retries=5,
         )
-        response.raise_for_status()
-        payload = response.json()
-        content = payload["choices"][0]["message"]["content"]
+        response = client.chat.completions.create(
+            model=model,
+            messages=[
+                {
+                    "role": "system",
+                    "content": "You provide cautious, evidence-bound business lead analysis.",
+                },
+                {"role": "user", "content": prompt},
+            ],
+            response_format={"type": "json_object"},
+        )
+        content = response.choices[0].message.content
         result = json.loads(content)
-    except (requests.RequestException, KeyError, IndexError, TypeError, ValueError) as exc:
+    except (APIError, KeyError, IndexError, TypeError, json.JSONDecodeError) as exc:
         raise EnrichmentError(f"AI enrichment request failed: {exc}") from exc
 
     if not isinstance(result, dict):
