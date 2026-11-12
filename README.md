@@ -4,6 +4,12 @@ An AI-assisted lead management app built with Streamlit. Store leads in SQLite a
 
 The AI does not browse the web or verify claims. Review suggestions and check reliable sources before treating them as facts.
 
+# Lead Research Agent
+
+**[🚀 Live Demo](https://lead-research-agent-xxntz23j85mz9cz2rwgtxh.streamlit.app/)**
+
+![Tests](https://github.com/Siriartham/lead-research-agent/actions/workflows/tests.yml/badge.svg)
+
 ## Features
 
 - Add, browse, search, edit, and delete leads.
@@ -14,7 +20,8 @@ The AI does not browse the web or verify claims. Review suggestions and check re
 ## Run locally
 
 ```powershell
-cd D:\Agent_project\lead-research-agent
+git clone https://github.com/Siriartham/lead-research-agent.git
+cd lead-research-agent
 py -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
@@ -30,25 +37,6 @@ AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
 AI_MODEL=gemini-3.8-flash
 ```
 
-Add your private key locally after `AI_API_KEY=`. Never commit or share the key.
-
-## Deploy to Streamlit Community Cloud
-
-1. Push this repository to GitHub.
-2. Sign in at [share.streamlit.io](https://share.streamlit.io/) and select **Create app**.
-3. Choose this repository, the `main` branch, and `app.py` as the main file.
-4. In **Advanced settings → Secrets**, add your provider settings in TOML format:
-
-   ```toml
-   AI_API_KEY = "your-private-provider-key"
-   AI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
-   AI_MODEL = "gemini-3.8-flash"
-   ```
-
-5. Click **Deploy**. Later pushes to `main` trigger a redeployment.
-
-Use the exact base URL and model identifier supported by your provider and account. API usage or billing limits are separate from ChatGPT subscriptions. The app allows up to 120 seconds per request and retries transient API failures up to five times; persistent provider-side errors such as 503 still require the provider to recover.
-
 ## Tests
 
 ```powershell
@@ -56,6 +44,17 @@ python -m unittest discover -s tests -v
 ```
 
 GitHub Actions runs the unit tests on pushes and pull requests to `main`.
+
+## 📸 Screenshots
+
+### Dashboard
+![Dashboard](screenshots/dashboard.png)
+
+### Add Lead
+![Add Lead](screenshots/add-lead.png)
+
+### AI Enrichment
+![AI Enrichment](screenshots/ai-enrichment.png)
 
 ## Important limitations
 
